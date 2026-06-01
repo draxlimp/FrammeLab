@@ -37,10 +37,11 @@ document.addEventListener('DOMContentLoaded', () => {
   setupScrollReveals();
   setupHeaderScroll();
   setupScreenshotAndPrintProtection();
+  setupInteractiveParticles();
 });
 
 /**
- * 1. REAL-TIME UTC DIGITAL CLOCK
+ * 1. REAL-TIME BRAZIL DIGITAL CLOCK (HORÁRIO DE SÃO PAULO/BRASÍLIA)
  */
 function initUTCClock() {
   const clockEl = document.getElementById('clock');
@@ -48,12 +49,22 @@ function initUTCClock() {
 
   function updateClock() {
     const now = new Date();
-    const pad = (num) => String(num).padStart(2, '0');
-    const hh = pad(now.getUTCHours());
-    const mm = pad(now.getUTCMinutes());
-    const ss = pad(now.getUTCSeconds());
-    
-    clockEl.textContent = `${hh}:${mm}:${ss}`;
+    const options = {
+      timeZone: 'America/Sao_Paulo',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    };
+    try {
+      const formatter = new Intl.DateTimeFormat('pt-BR', options);
+      clockEl.textContent = formatter.format(now);
+    } catch (e) {
+      // Robust standard fallback in case Intl.DateTimeFormat fails
+      const pad = (num) => String(num).padStart(2, '0');
+      const brHours = (now.getUTCHours() - 3 + 24) % 24;
+      clockEl.textContent = `${pad(brHours)}:${pad(now.getUTCMinutes())}:${pad(now.getUTCSeconds())}`;
+    }
   }
 
   updateClock();
@@ -519,4 +530,79 @@ function setupScreenshotAndPrintProtection() {
       showToast('DIREITOS RESERVADOS - SUIT');
     }
   });
+}
+
+/**
+ * 11. MOUSE FOLLOW SMOOTH GREY PARTICLE SYSTEM
+ */
+function setupInteractiveParticles() {
+  const canvas = document.getElementById('particle-canvas');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  let mouse = { x: null, y: null };
+
+  window.addEventListener('mousemove', (e) => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+    
+    // Low emission density as requested: "particula cinza bem pouca, e suave"
+    if (Math.random() < 0.15) {
+      particles.push(new Particle(mouse.x, mouse.y));
+    }
+  });
+
+  class Particle {
+    constructor(x, y) {
+      this.x = x;
+      this.y = y;
+      this.vx = (Math.random() - 0.5) * 0.9;
+      this.vy = (Math.random() - 0.5) * 0.9;
+      this.size = Math.random() * 2 + 0.8;
+      this.alpha = 0.55;
+      this.decay = Math.random() * 0.007 + 0.003; 
+    }
+
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      this.alpha -= this.decay;
+    }
+
+    draw() {
+      ctx.save();
+      ctx.globalAlpha = this.alpha;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = '#8e8e8e'; // Smooth, sophisticated gray tone
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      p.update();
+      if (p.alpha <= 0) {
+        particles.splice(i, 1);
+      } else {
+        p.draw();
+      }
+    }
+    
+    requestAnimationFrame(animate);
+  }
+  animate();
 }
