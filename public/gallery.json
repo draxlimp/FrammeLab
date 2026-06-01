@@ -1,0 +1,23 @@
+[
+  {
+    "id": "1",
+    "title": "Minimal 111",
+    "description": "Custom visual artwork",
+    "category": "Curated Art",
+    "src": "/Arts/111.png"
+  },
+  {
+    "id": "2",
+    "title": "Clavaa Artwork",
+    "description": "High-contrast digital masterpiece",
+    "category": "Curated Art",
+    "src": "/Arts/clavaa.jpg"
+  },
+  {
+    "id": "3",
+    "title": "Clavva Render",
+    "description": "Premium luxury architecture",
+    "category": "Curated Art",
+    "src": "/Arts/clavva.PNG"
+  }
+]
