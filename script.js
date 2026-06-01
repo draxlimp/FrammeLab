@@ -7,26 +7,6 @@
 let galleryItems = [];
 let currentlySelectedId = null;
 
-// Fallback high-contrast premium imagery in case custom Arts folder is blank/missing
-const FALLBACK_ARTS = [
-  {
-    "id": "1",
-    "src": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=95"
-  },
-  {
-    "id": "2",
-    "src": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=95"
-  },
-  {
-    "id": "3",
-    "src": "https://images.unsplash.com/photo-1618005198143-e52834644023?auto=format&fit=crop&w=1200&q=95"
-  },
-  {
-    "id": "4",
-    "src": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=95"
-  }
-];
-
 document.addEventListener('DOMContentLoaded', () => {
   initUTCClock();
   initHeroAnimations();
@@ -105,26 +85,17 @@ async function loadGalleryData() {
   if (!grid) return;
 
   try {
-    const res = await fetch('/gallery.json');
-    if (!res.ok) throw new Error('Offline or custom JSON fallback needed');
+    const res = await fetch('/gallery.json?' + new Date().getTime()); // Avoid caching
+    if (!res.ok) throw new Error('No custom dynamic artwork list');
     const data = await res.json();
-    // Keep structure robust even with metadata present in custom gallery.json files
     galleryItems = data.map((item, index) => ({
       id: item.id || String(index + 1),
       src: item.src || item.image || item.url
     })).filter(item => item.src);
     
-    if (galleryItems.length === 0) throw new Error('Empty list');
   } catch (err) {
-    console.warn('FrameLab: Utilizando imagens premium de demonstração...', err);
-    // Let's populate with custom local Arts paths if user added them, otherwise use stunning seeds
-    galleryItems = [
-      { id: "1", src: "/Arts/01-crystal-structure.png" },
-      { id: "2", src: "/Arts/02-architectural-dome.png" },
-      { id: "3", src: "/Arts/03-chrome-reflections.png" },
-      { id: "4", src: "/Arts/04-porcelain-drapery.png" },
-      ...FALLBACK_ARTS
-    ];
+    console.warn('FrameLab: Nenhuma obra disponível no portfólio no momento.', err);
+    galleryItems = [];
   }
 
   renderGallery(galleryItems);
@@ -165,7 +136,7 @@ function renderGallery(items) {
           alt="Obra de Arte FrameLab" 
           class="opacity-0 transition-opacity duration-500 w-full h-full object-cover" 
           onload="this.classList.remove('opacity-0'); this.parentElement.classList.remove('img-loading-shimmer')"
-          onerror="this.src='https://picsum.photos/seed/${item.id}/1200/900'; this.classList.remove('opacity-0')"
+          onerror="const card = this.closest('.art-card'); if (card) { card.remove(); const grid = document.getElementById('gallery-grid'); if (grid && grid.children.length === 0) { document.getElementById('no-results').classList.remove('hidden'); document.getElementById('no-results').classList.add('flex'); } }"
           referrerpolicy="no-referrer"
         />
         <!-- Custom Luxury Glass Hover Zoom Indicator (Eye Icon Overlay) -->
