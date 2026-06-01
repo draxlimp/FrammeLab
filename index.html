@@ -13,6 +13,9 @@
   </head>
   <body class="bg-[#fafafa] text-[#111111] font-sans antialiased overflow-x-hidden selection:bg-[#111111] selection:text-[#ffffff]">
     
+    <!-- MOUSE FOLLOWER INTERACTIVE PARTICLE CANVAS -->
+    <canvas id="particle-canvas" class="fixed inset-0 pointer-events-none z-[1900]"></canvas>
+
     <!-- Cinematic Ambient Overlay & Mesh Gradients -->
     <div class="fixed top-0 left-0 w-full h-full pointer-events-none z-0 overflow-hidden opacity-40">
       <div class="absolute top-[-10%] left-[-20%] w-[60%] h-[60%] rounded-full bg-radial from-neutral-200 to-transparent blur-3xl animate-float-slow"></div>
@@ -30,7 +33,7 @@
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-neutral-900 opacity-20"></span>
             <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-neutral-900 group-hover:scale-125 transition-all duration-300"></span>
           </span>
-          <span class="relative">
+          <span class="relative logo-title">
             FrameLab
             <span class="absolute -bottom-1 left-0 w-0 h-[1px] bg-neutral-900 transition-all duration-300 group-hover:w-full"></span>
           </span>
@@ -45,7 +48,7 @@
         <!-- Right Side Nav Metadata -->
         <div class="flex items-center gap-6">
           <div id="header-time" class="text-xs font-mono text-neutral-400 hidden sm:block">
-            UTC: <span id="clock" class="text-neutral-700">00:00:00</span>
+            BR: <span id="clock" class="text-neutral-700">00:00:00</span>
           </div>
           <a href="#work-with-me" class="px-5 py-2.5 rounded-full bg-neutral-900 text-white hover:bg-neutral-800 transition-all duration-300 shadow-sm text-xs font-semibold tracking-wider uppercase">
             Contato
@@ -256,61 +259,57 @@
     </main>
 
     <!-- PREMIUM LIGHTBOX MODAL OVERLAY - BEAUTIFIED AND DEDICATED SOLELY TO THE ART PICTURE AS REQUESTED -->
-    <div id="lightbox" class="fixed inset-0 z-100 hidden flex-col items-center justify-center p-4 sm:p-6 md:p-10 pointer-events-auto">
+    <div id="lightbox" class="fixed inset-0 z-[2000] hidden flex-col items-center justify-center p-4 sm:p-8 pointer-events-auto">
       
       <!-- Ambient Blur Backdrop Layer -->
-      <div id="lightbox-bg" class="absolute inset-0 bg-neutral-950/95 backdrop-blur-2xl opacity-0 transition-opacity duration-500 ease-out"></div>
+      <div id="lightbox-bg" class="absolute inset-0 bg-neutral-950/95 backdrop-blur-3xl opacity-0 transition-opacity duration-500 ease-out cursor-pointer"></div>
       
       <!-- Inner Lightbox Content Container -->
-      <div id="lightbox-container" class="relative z-10 w-full max-w-5xl h-full flex items-center justify-center select-none opacity-0 scale-95 transition-all duration-500 ease-out">
+      <div id="lightbox-container" class="relative z-10 w-full max-w-6xl flex flex-col items-center justify-center select-none opacity-0 scale-95 transition-all duration-500 ease-out">
         
-        <div class="w-full h-full flex bg-[#0c0c0c]/40 border border-white/5 rounded-2xl overflow-hidden max-h-[85vh] md:max-h-[80vh] shadow-2xl relative">
+        <!-- Floating Close Trigger (Upper Corner) -->
+        <button id="lightbox-close-btn" class="absolute -top-14 right-2 sm:right-4 z-50 h-12 w-12 flex items-center justify-center rounded-full bg-white/10 border border-white/10 text-white hover:bg-white hover:text-black hover:scale-110 active:scale-95 transition-all duration-300 shadow-lg cursor-pointer">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+
+        <!-- Centered Image Wrapper with no rigid box boundaries, pure floating elegance -->
+        <div class="relative flex items-center justify-center max-w-full max-h-[75vh]">
           
-          <!-- Image rendering fully centralized -->
-          <div class="relative flex-1 bg-black/40 flex items-center justify-center overflow-hidden h-full">
-            
-            <!-- Floating close triggers -->
-            <button id="lightbox-close-btn" class="absolute top-6 right-6 z-50 h-11 w-11 flex items-center justify-center rounded-full bg-black/60 border border-white/10 text-white hover:bg-white hover:text-black transition-all duration-300 shadow-lg cursor-pointer">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
+          <!-- Lightbox Main Active Image -->
+          <img 
+            id="lightbox-img" 
+            src="" 
+            alt="Art Dynamic View" 
+            referrerpolicy="no-referrer"
+            class="max-w-[95vw] sm:max-w-[85vw] max-h-[72vh] md:max-h-[75vh] object-contain rounded-2xl shadow-[0_25px_60px_rgba(0,0,0,0.85)] border border-white/10 transition-all duration-500 ease-out scale-100 pointer-events-auto"
+          />
 
-            <!-- Lightbox Main Active Image -->
-            <img 
-              id="lightbox-img" 
-              src="" 
-              alt="Art Dynamic View" 
-              referrerpolicy="no-referrer"
-              class="max-w-full max-h-[82vh] object-contain transition-all duration-700 ease-out scale-100 pointer-events-auto"
-            />
-            
-            <!-- Left Arrow Carousel Button -->
-            <button id="lightbox-prev" class="absolute left-6 h-12 w-12 rounded-full bg-black/50 border border-white/10 text-white/80 hover:text-white hover:bg-black/90 hover:scale-110 transition-all duration-200 flex items-center justify-center cursor-pointer">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-              </svg>
-            </button>
+          <!-- Left Arrow Floating Carousel Button -->
+          <button id="lightbox-prev" class="absolute -left-4 sm:-left-20 top-1/2 -translate-y-1/2 h-14 w-14 rounded-full bg-white/5 border border-white/10 text-white/80 hover:text-white hover:bg-white/20 hover:scale-110 active:scale-90 transition-all duration-200 flex items-center justify-center cursor-pointer shadow-xl backdrop-blur-md">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+            </svg>
+          </button>
 
-            <!-- Right Arrow Carousel Button -->
-            <button id="lightbox-next" class="absolute right-6 h-12 w-12 rounded-full bg-black/50 border border-white/10 text-white/80 hover:text-white hover:bg-black/90 hover:scale-110 transition-all duration-200 flex items-center justify-center cursor-pointer">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-              </svg>
-            </button>
+          <!-- Right Arrow Floating Carousel Button -->
+          <button id="lightbox-next" class="absolute -right-4 sm:-right-20 top-1/2 -translate-y-1/2 h-14 w-14 rounded-full bg-white/5 border border-white/10 text-white/80 hover:text-white hover:bg-white/20 hover:scale-110 active:scale-90 transition-all duration-200 flex items-center justify-center cursor-pointer shadow-xl backdrop-blur-md">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            </svg>
+          </button>
+          
+        </div>
 
-            <!-- Bottom Floating Action Panel (Download removed for protection) -->
-            <div class="absolute bottom-6 inset-x-0 mx-auto w-fit flex items-center justify-center bg-black/70 border border-white/10 rounded-full py-2.5 px-8 backdrop-blur-md">
-              <button 
-                id="lightbox-close-alt"
-                class="text-neutral-300 hover:text-white transition-colors text-xs font-mono font-medium tracking-widest uppercase cursor-pointer"
-              >
-                Fechar Painel ×
-              </button>
-            </div>
-
-          </div>
-
+        <!-- Bottom Floating Minimal Control Panel -->
+        <div class="mt-8 flex items-center justify-center">
+          <button 
+            id="lightbox-close-alt"
+            class="px-8 py-3 rounded-full bg-white/10 border border-white/10 text-neutral-200 hover:text-white hover:bg-white/20 hover:scale-105 active:scale-95 text-xs font-mono font-medium tracking-[0.2em] uppercase transition-all duration-300 backdrop-blur-md cursor-pointer"
+          >
+            FECHAR ×
+          </button>
         </div>
 
       </div>
