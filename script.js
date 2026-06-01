@@ -85,7 +85,13 @@ async function loadGalleryData() {
   if (!grid) return;
 
   try {
-    const res = await fetch('/gallery.json?' + new Date().getTime()); // Avoid caching
+    const res = await fetch('/gallery.json?' + new Date().getTime(), {
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
+      }
+    });
     if (!res.ok) throw new Error('No custom dynamic artwork list');
     const data = await res.json();
     galleryItems = data.map((item, index) => ({
