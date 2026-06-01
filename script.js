@@ -589,77 +589,20 @@ function setupInteractiveParticles() {
  * 12. CYBERPUNK TEXT-SCRAMBLE TITLE ANIMATION ENGINE (ESTÉTICO)
  */
 function initTitleScramble() {
-  const targetText = "FrameLab - Portfólio";
-  const glitchChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZø⌘▲▼×#$@&+%_?/\\|{}[]<>_-$";
+  const targetText = "FrameLab";
+  const glitchChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZø⌘▲▼×#$@&+%_?/\\|{}[]<>-";
   
-  let currentWordState = targetText.split("");
-  let step = 0;
-  let isGlitching = true;
-  let ambientTick = 0;
-
-  // Faster timer cycle for fluid matrix-like aesthetic (50ms interval)
+  // Continually update the tab title with randomized cyber chars for constant glitch aesthetic
   setInterval(() => {
-    // If in major glitching/scramble & resolve phase
-    if (isGlitching) {
-      const output = targetText.split("").map((char, index) => {
-        if (char === " " || char === "-") return char;
-        
-        // Progressively resolve from left to right based on step
-        if (index < step) {
-          return char;
-        }
-        
-        // Characters near the resolution front have a chance of being resolved, others are completely randomized
-        if (index < step + 3 && Math.random() < 0.3) {
-          return char;
-        }
-        
-        // Pick random glitch letter or number
+    const output = targetText.split("").map((char) => {
+      // 35% probability per character to render a dynamic cyberpunk glitch key
+      if (Math.random() < 0.35) {
         return glitchChars[Math.floor(Math.random() * glitchChars.length)];
-      }).join("");
-
-      document.title = output;
-      step += 0.35; // Increment resolution progress speed
-
-      // Once the text has fully resolved
-      if (step >= targetText.length) {
-        document.title = targetText;
-        isGlitching = false;
-        ambientTick = 0;
       }
-    } else {
-      // Ambient phase: Standard beautiful title, but with sub-second random organic aesthetic twitch/flicker
-      ambientTick++;
-      
-      // Randomly glitch 1 or 2 letters into numerical code every now and then
-      if (Math.random() < 0.15) {
-        const glitchIndex1 = Math.floor(Math.random() * targetText.length);
-        const glitchIndex2 = Math.floor(Math.random() * targetText.length);
-        
-        const temp = targetText.split("").map((char, index) => {
-          if (char === " " || char === "-") return char;
-          if (index === glitchIndex1 || index === glitchIndex2) {
-            return glitchChars[Math.floor(Math.random() * glitchChars.length)];
-          }
-          return char;
-        }).join("");
-        
-        document.title = temp;
-        
-        // Return quickly to true title on next animation frame
-        setTimeout(() => {
-          if (!isGlitching) document.title = targetText;
-        }, 60);
-      } else {
-        document.title = targetText;
-      }
+      return char;
+    }).join("");
 
-      // Re-trigger massive clean scramble cycle every 4.5 seconds of ambient beauty
-      if (ambientTick > 90) {
-        isGlitching = true;
-        step = 0;
-      }
-    }
-  }, 50);
+    document.title = output;
+  }, 75);
 }
 
