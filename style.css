@@ -327,11 +327,44 @@ html {
   color: #8f8f8f;
 }
 
-/* ANTI-THEFT WATERMARK OVERLAY TRANSITIONS */
+/* GORGEOUS HOVER BLUR FOR FRAMELAB LOGO & TITLES */
+.logo-title, .title-word {
+  transition: filter 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+#nav-logo:hover .logo-title {
+  filter: blur(3px);
+  opacity: 0.6;
+  transform: scale(0.98);
+}
+
+.title-word:hover {
+  filter: blur(6px);
+  opacity: 0.5;
+  transform: scale(0.97);
+  cursor: default;
+}
+
+/* ANTI-THEFT WATERMARK OVERLAY TRANSITIONS - FORCE CENTERING */
+#print-watermark-overlay {
+  display: none !important;
+}
+
 #print-watermark-overlay.showing {
+  display: flex !important;
   opacity: 1 !important;
   transform: scale(1) !important;
   pointer-events: auto !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: #0a0a0a !important; /* Premium dark canvas background */
+  z-index: 9999999 !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
 }
 
 /* @media print security protection rule */
