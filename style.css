@@ -6,27 +6,15 @@
   --font-mono: "JetBrains Mono", SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
-/* Custom Webflow & Awwwards Scrollbar */
+/* Custom Webflow & Awwwards Scrollbar - hidden as requested but scrollable */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: #020617;
-}
-::-webkit-scrollbar-thumb {
-  background: #1e293b;
-  border-radius: 10px;
-  transition: background 0.3s ease;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #f97316;
+  display: none;
 }
 
 /* Base Style Fixes */
 html {
-  scrollbar-color: #1e293b #020617;
-  scrollbar-width: thin;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 /* Custom Animation Keyframes */
