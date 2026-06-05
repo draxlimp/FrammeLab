@@ -29,7 +29,7 @@ async function getVisitorStore(): Promise<VisitorData> {
 
     const fileExists = await fs.stat(DATA_FILE).then(() => true).catch(() => false);
     if (!fileExists) {
-      const initial: VisitorData = { baseline: 146380, uniques: {} };
+      const initial: VisitorData = { baseline: 0, uniques: {} };
       await fs.writeFile(DATA_FILE, JSON.stringify(initial, null, 2), "utf-8");
       return initial;
     }
@@ -37,13 +37,13 @@ async function getVisitorStore(): Promise<VisitorData> {
     const raw = await fs.readFile(DATA_FILE, "utf-8");
     const parsed = JSON.parse(raw);
     
-    if (typeof parsed.baseline !== "number") parsed.baseline = 146380;
+    if (typeof parsed.baseline !== "number" || parsed.baseline === 146380) parsed.baseline = 0;
     if (!parsed.uniques || typeof parsed.uniques !== "object") parsed.uniques = {};
     
     return parsed as VisitorData;
   } catch (err) {
     console.error("Error reading visitor store, using default baseline:", err);
-    return { baseline: 146380, uniques: {} };
+    return { baseline: 0, uniques: {} };
   }
 }
 
