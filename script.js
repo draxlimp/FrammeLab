@@ -905,20 +905,6 @@ function initScrollTiltedGrid() {
     const windowHeight = window.innerHeight;
 
     cards.forEach((card, index) => {
-      // Check if mouse is hovering over this card to let custom hover state occupy focus
-      if (card.matches(':hover')) {
-        card.style.transform = `perspective(1000px) translateY(-12px) scale(1.03)`;
-        card.style.boxShadow = `0 35px 70px rgba(0, 0, 0, 0.12), 0 5px 15px rgba(0, 0, 0, 0.04)`;
-        card.style.borderColor = 'rgba(17, 17, 17, 0.15)';
-        
-        const img = card.querySelector('img');
-        if (img) {
-          img.style.transform = `scale(1.08)`;
-          img.style.filter = `blur(3px) brightness(0.85) contrast(1.02)`;
-        }
-        return;
-      }
-
       const rect = card.getBoundingClientRect();
       const elementHeight = rect.height || 360;
       const elementTop = rect.top;
@@ -935,11 +921,11 @@ function initScrollTiltedGrid() {
       const centerDist = Math.abs(p - 0.5) * 2; // [0 at center, 1 at boundaries]
 
       // 1. Vertical translation (staggered overlap on scroll)
-      const ty = (0.5 - p) * 120; // Up to 60px down at entry, 60px up at exit
+      let ty = (0.5 - p) * 120; // Up to 60px down at entry, 60px up at exit
 
       // 2. Perspective depth (Z-translation)
       // Cards recede deep into the background plane at the boundaries, and fly-in for crisp center focus
-      const tz = -centerDist * 220; // Retracts up to 220px deep
+      let tz = -centerDist * 220; // Retracts up to 220px deep
 
       // 3. Lateral swaying translation (alternating L/R depending on list index)
       const sign = index % 2 === 0 ? -1 : 1;
@@ -955,9 +941,22 @@ function initScrollTiltedGrid() {
       const sk = -sign * (p - 0.5) * 2 * maxSkew;
 
       // 7. Dynamic photorealistic focus filtering (defocusing, lighting, contrast)
-      const blurVal = centerDist * maxBlur;
-      const brightVal = 0.45 + 0.55 * (1 - centerDist); // dimmer and shadowy at edges, beams with focus at center
-      const contrastVal = 1.0 + centerDist * 1.8;      // high stark contrast on enter/exit, authentic at center
+      let blurVal = centerDist * maxBlur;
+      let brightVal = 0.45 + 0.55 * (1 - centerDist); // dimmer and shadowy at edges, beams with focus at center
+      let contrastVal = 1.0 + centerDist * 1.8;      // high stark contrast on enter/exit, authentic at center
+
+      const isHovered = card.matches(':hover');
+
+      // Enhanced hover effects while perfectly preserving the organic tilt perspective
+      if (isHovered) {
+        ty -= 15;                         // Smooth lift adjustment
+        tz += 60;                         // Bring closer in 3D perspective
+        blurVal = Math.min(blurVal, 1.2); // Keep artwork pin-sharp during hover
+        brightVal = 1.0;                  // Pristine full illumination
+        contrastVal = 1.03;               // Slight premium pop
+      }
+
+      const scaleStr = isHovered ? 'scale(1.05)' : 'scale(1)';
 
       // Apply the cumulative 3D transform matrices
       card.style.transform = `
@@ -967,18 +966,25 @@ function initScrollTiltedGrid() {
         rotateY(0deg)
         rotateZ(${rot}deg)
         skewX(${sk}deg)
+        ${scaleStr}
       `;
 
       // Soft glass shadow intensity tracks depth progress
-      const shadowAlpha = 0.015 + 0.065 * (1 - centerDist);
-      card.style.boxShadow = `0 ${20 - centerDist * 15}px ${50 - centerDist * 35}px rgba(0, 0, 0, ${shadowAlpha})`;
-      card.style.borderColor = `rgba(255, 255, 255, ${0.4 + 0.45 * (1 - centerDist)})`;
+      const shadowAlpha = isHovered ? 0.16 : (0.015 + 0.065 * (1 - centerDist));
+      card.style.boxShadow = isHovered 
+        ? `0 35px 70px rgba(0, 0, 0, 0.45), 0 10px 25px rgba(249, 115, 22, 0.1)`
+        : `0 ${20 - centerDist * 15}px ${50 - centerDist * 35}px rgba(0, 0, 0, ${shadowAlpha})`;
+
+      card.style.borderColor = isHovered 
+        ? 'rgba(249, 115, 22, 0.45)' 
+        : `rgba(255, 255, 255, ${0.4 + 0.45 * (1 - centerDist)})`;
 
       // Vertical image elongation mapping to simulate fluid kinetic stretch/pull of cell lenses
       const img = card.querySelector('img');
       if (img) {
-        const scaleY = 1.0 + centerDist * 0.35; // scales up to 1.35x vertically at edge coordinates
-        img.style.transform = `scaleY(${scaleY})`;
+        const baseScaleY = 1.0 + centerDist * 0.35; // scales up to 1.35x vertically at edge coordinates
+        const zoomFactor = isHovered ? 1.07 : 1.0;
+        img.style.transform = `scaleY(${baseScaleY}) scale(${zoomFactor})`;
         img.style.filter = `blur(${blurVal}px) brightness(${brightVal}) contrast(${contrastVal})`;
       }
     });
