@@ -26,6 +26,25 @@ document.addEventListener('DOMContentLoaded', () => {
   initTitleScramble();
 });
 
+// Coordinate animated preloader fade-out upon full resources loaded
+window.addEventListener('load', () => {
+  const preloader = document.getElementById('app-preloader');
+  if (preloader) {
+    const minTime = 2000; // 2 seconds minimum showcase
+    const elapsed = Date.now() - (window.pageStartTime || Date.now());
+    const remaining = Math.max(0, minTime - elapsed);
+    
+    setTimeout(() => {
+      preloader.style.opacity = '0';
+      preloader.style.pointerEvents = 'none';
+      document.body.classList.remove('preloader-active');
+      setTimeout(() => {
+        preloader.remove();
+      }, 1000);
+    }, remaining);
+  }
+});
+
 /**
  * 0. KINETIC GRAIN NOISE CANVAS (AS DIRECTED BY THE BACKGROUND EFFECT COMPONENT)
  */
