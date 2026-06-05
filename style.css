@@ -17,6 +17,58 @@ html {
   -ms-overflow-style: none;
 }
 
+body.preloader-active {
+  overflow: hidden !important;
+  height: 100vh !important;
+}
+
+/* Premium Loading animations */
+@keyframes loader-transform {
+  0% {
+    transform: translate(-55%);
+  }
+  100% {
+    transform: translate(55%);
+  }
+}
+
+@keyframes loader-opacity {
+  0%, 100% {
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  65% {
+    opacity: 0;
+  }
+}
+
+@keyframes loader-letter {
+  0% {
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+    text-shadow: 0 0 4px #fff;
+    transform: scale(1.1) translateY(-2px);
+  }
+  20% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.animate-loader-letter {
+  animation: loader-letter 4s linear infinite;
+}
+
+.animate-loader-bg {
+  animation: loader-transform 2s infinite alternate cubic-bezier(0.6, 0.8, 0.5, 1), loader-opacity 4s infinite;
+}
+
 /* Custom Animation Keyframes */
 @keyframes float-slow {
   0%, 100% {
