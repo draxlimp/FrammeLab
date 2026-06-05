@@ -212,7 +212,7 @@ html {
 
 .art-card:hover img {
   transform: scale(1.05);
-  filter: contrast(1.05) brightness(0.65) blur(6px);
+  filter: contrast(1.03) brightness(1.0) blur(0px);
 }
 
 /* Glowing tag badge inside card */
