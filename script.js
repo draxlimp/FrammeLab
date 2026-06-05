@@ -88,6 +88,14 @@ function initVisitorCounter() {
   const onlineEl = document.getElementById('online-count');
   if (!visitorEl) return;
 
+  // Clear legacy simulated database lines from user's storage if they hold numbers above 10,000 to reset to 0
+  if (parseInt(localStorage.getItem('framelab_visitors_local')) > 10000 || parseInt(localStorage.getItem('framelab_visitors_total')) > 10000) {
+    localStorage.removeItem('framelab_visitors_local');
+    localStorage.removeItem('framelab_visitors_total');
+    localStorage.removeItem('framelab_visitor_uuid');
+    localStorage.removeItem('framelab_session_registered');
+  }
+
   let visitorId = localStorage.getItem('framelab_visitor_uuid') || '';
 
   async function fetchVisitorStats() {
@@ -117,7 +125,7 @@ function initVisitorCounter() {
       console.warn('[FrameLab Analytics] Secure server metrics unavailable, using offline fallback:', err);
       let localTotal = parseInt(localStorage.getItem('framelab_visitors_local'));
       if (isNaN(localTotal) || !localTotal) {
-        localTotal = 146380;
+        localTotal = 0;
       }
       if (!localStorage.getItem('framelab_session_registered')) {
         localTotal += 1;
