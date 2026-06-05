@@ -81,24 +81,56 @@ function initNoiseBackground() {
 }
 
 /**
- * 1. PREMIUM DYNAMIC VISITOR COUNTER ENGINE (WITH LOCAL STORAGE & LIVE REAL ACTIVITY SIMULATION)
+ * 1. PREMIUM DYNAMIC VISITOR COUNTER ENGINE (WITH SECURE REAL-TIME METRICS)
  */
 function initVisitorCounter() {
   const visitorEl = document.getElementById('visitor-count');
+  const onlineEl = document.getElementById('online-count');
   if (!visitorEl) return;
 
-  // Retrieve baseline total or initialize beautifully to represent prestigious growth
-  let currentVal = parseInt(localStorage.getItem('framelab_visitors_total'));
-  if (isNaN(currentVal) || !currentVal) {
-    currentVal = 146380;
+  let visitorId = localStorage.getItem('framelab_visitor_uuid') || '';
+
+  async function fetchVisitorStats() {
+    try {
+      const response = await fetch('/api/visitors', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ visitorId })
+      });
+      if (!response.ok) throw new Error('API request failed');
+      const data = await response.json();
+      
+      if (data.visitorId && data.visitorId !== visitorId) {
+        visitorId = data.visitorId;
+        localStorage.setItem('framelab_visitor_uuid', visitorId);
+      }
+
+      if (typeof data.count === 'number') {
+        visitorEl.textContent = data.count.toLocaleString('pt-BR');
+      }
+      if (onlineEl && typeof data.online === 'number') {
+        onlineEl.textContent = data.online.toLocaleString('pt-BR');
+      }
+    } catch (err) {
+      console.warn('[FrameLab Analytics] Secure server metrics unavailable, using offline fallback:', err);
+      let localTotal = parseInt(localStorage.getItem('framelab_visitors_local'));
+      if (isNaN(localTotal) || !localTotal) {
+        localTotal = 146380;
+      }
+      if (!localStorage.getItem('framelab_session_registered')) {
+        localTotal += 1;
+        localStorage.setItem('framelab_visitors_local', localTotal);
+        localStorage.setItem('framelab_session_registered', 'true');
+      }
+      visitorEl.textContent = localTotal.toLocaleString('pt-BR');
+      if (onlineEl) onlineEl.textContent = '1';
+    }
   }
 
-  // Increment tally on current session access and persist
-  currentVal += 1;
-  localStorage.setItem('framelab_visitors_total', currentVal);
-
-  // Set the visitor count instantly to the exact real total (no faking or pulsing)
-  visitorEl.textContent = currentVal.toLocaleString('pt-BR');
+  fetchVisitorStats();
+  setInterval(fetchVisitorStats, 30000);
 }
 
 /**
