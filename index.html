@@ -10,8 +10,32 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
     <!-- Load custom stylesheet -->
     <link rel="stylesheet" href="/style.css" />
+    <script>window.pageStartTime = Date.now();</script>
   </head>
-  <body class="bg-slate-950 text-neutral-100 font-sans antialiased overflow-x-hidden selection:bg-orange-500 selection:text-white">
+  <body class="bg-slate-950 text-neutral-100 font-sans antialiased overflow-x-hidden selection:bg-orange-500 selection:text-white preloader-active">
+    
+    <!-- PREMIUM CHRONOS INFUSED LOADING LINES PRELOADER -->
+    <div id="app-preloader" class="fixed inset-0 bg-slate-950 z-[9999] flex flex-col items-center justify-center transition-all duration-[1000ms] ease-out pointer-events-auto">
+      <div class="relative flex items-center justify-center h-[120px] w-auto m-8 font-display text-[1.8em] sm:text-[2.2em] font-semibold select-none text-white scale-[1.3] sm:scale-[1.8]">
+        <!-- Animated letters for "Loading" -->
+        <span class="relative inline-block opacity-0 z-[2] animate-loader-letter text-white font-display" style="animation-delay: 0.1s;">L</span>
+        <span class="relative inline-block opacity-0 z-[2] animate-loader-letter text-white font-display" style="animation-delay: 0.205s;">o</span>
+        <span class="relative inline-block opacity-0 z-[2] animate-loader-letter text-white font-display" style="animation-delay: 0.31s;">a</span>
+        <span class="relative inline-block opacity-0 z-[2] animate-loader-letter text-white font-display" style="animation-delay: 0.415s;">d</span>
+        <span class="relative inline-block opacity-0 z-[2] animate-loader-letter text-white font-display" style="animation-delay: 0.52s;">i</span>
+        <span class="relative inline-block opacity-0 z-[2] animate-loader-letter text-white font-display" style="animation-delay: 0.625s;">n</span>
+        <span class="relative inline-block opacity-0 z-[2] animate-loader-letter text-white font-display" style="animation-delay: 0.73s;">g</span>
+
+        <!-- Loader background with Repeating Linear Gradient Masks -->
+        <div class="absolute top-0 left-0 w-full h-full z-[1] bg-transparent" style="mask-image: repeating-linear-gradient(90deg, transparent 0, transparent 6px, black 7px, black 8px); -webkit-mask-image: repeating-linear-gradient(90deg, transparent 0, transparent 6px, black 7px, black 8px);">
+          <div class="absolute top-0 left-0 w-full h-full animate-loader-bg"
+               style="background-image: radial-gradient(circle at 50% 50%, #ff0 0%, transparent 50%), radial-gradient(circle at 45% 45%, #f00 0%, transparent 45%), radial-gradient(circle at 55% 55%, #0ff 0%, transparent 45%), radial-gradient(circle at 45% 55%, #0f0 0%, transparent 45%), radial-gradient(circle at 55% 45%, #00f 0%, transparent 45%);
+                      mask-image: radial-gradient(circle at 50% 50%, transparent 0%, transparent 10%, black 25%);
+                      -webkit-mask-image: radial-gradient(circle at 50% 50%, transparent 0%, transparent 10%, black 25%);">
+          </div>
+        </div>
+      </div>
+    </div>
     
     <!-- BRAND NEW GRADIENT BACKGROUND + KINETIC GRAIN NOISE CANVAS (AS SPECIFIED IN THE EFFECT COMPONENT) -->
     <div class="fixed inset-0 -z-10 bg-slate-950 overflow-hidden">
