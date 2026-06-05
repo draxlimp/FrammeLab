@@ -11,17 +11,20 @@
     <!-- Load custom stylesheet -->
     <link rel="stylesheet" href="/style.css" />
   </head>
-  <body class="bg-[#fafafa] text-[#111111] font-sans antialiased overflow-x-hidden selection:bg-[#111111] selection:text-[#ffffff]">
+  <body class="bg-slate-950 text-neutral-100 font-sans antialiased overflow-x-hidden selection:bg-orange-500 selection:text-white">
     
+    <!-- BRAND NEW GRADIENT BACKGROUND + KINETIC GRAIN NOISE CANVAS (AS SPECIFIED IN THE EFFECT COMPONENT) -->
+    <div class="fixed inset-0 -z-10 bg-slate-950 overflow-hidden">
+      <!-- Radial spotlight (orange) -->
+      <div class="absolute inset-0 bg-[radial-gradient(circle_700px_at_50%_200px,rgba(249,115,22,0.18),transparent)] pointer-events-none"></div>
+      <!-- Subtle top secondary orange glow -->
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full bg-orange-500/10 blur-[130px] opacity-70 pointer-events-none"></div>
+      <!-- Grain canvas container -->
+      <canvas id="noise-canvas" class="pointer-events-none absolute inset-0" style="image-rendering: pixelated;"></canvas>
+    </div>
+
     <!-- MOUSE FOLLOWER INTERACTIVE PARTICLE CANVAS -->
     <canvas id="particle-canvas" class="fixed inset-0 pointer-events-none z-[1900]"></canvas>
-
-    <!-- Cinematic Ambient Overlay & Mesh Gradients -->
-    <div class="fixed top-0 left-0 w-full h-full pointer-events-none z-0 overflow-hidden opacity-40">
-      <div class="absolute top-[-10%] left-[-20%] w-[60%] h-[60%] rounded-full bg-radial from-neutral-200 to-transparent blur-3xl animate-float-slow"></div>
-      <div class="absolute bottom-[-10%] right-[-20%] w-[60%] h-[60%] rounded-full bg-radial from-neutral-300 to-transparent blur-3xl animate-float-reverse"></div>
-      <div class="absolute top-[30%] right-[10%] w-[30%] h-[30%] rounded-full bg-radial from-neutral-100 to-transparent blur-2xl"></div>
-    </div>
 
     <!-- Floating Luxury Header -->
     <header id="main-header" class="fixed top-0 left-0 w-full z-50 transition-all duration-500 border-b border-transparent">
@@ -30,55 +33,73 @@
         <!-- Logo -->
         <a id="nav-logo" href="#" class="group flex items-center gap-3 font-display font-semibold tracking-[0.2em] text-lg uppercase transition-all duration-300 hover:opacity-80">
           <span class="relative flex h-5 w-5 items-center justify-center">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-neutral-900 opacity-20"></span>
-            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-neutral-900 group-hover:scale-125 transition-all duration-300"></span>
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-500 opacity-20"></span>
+            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-orange-500 group-hover:scale-125 transition-all duration-300"></span>
           </span>
-          <span class="relative logo-title">
+          <span class="relative logo-title text-white">
             FrameLab
-            <span class="absolute -bottom-1 left-0 w-0 h-[1px] bg-neutral-900 transition-all duration-300 group-hover:w-full"></span>
+            <span class="absolute -bottom-1 left-0 w-0 h-[1px] bg-orange-500 transition-all duration-300 group-hover:w-full"></span>
           </span>
         </a>
 
         <!-- Middle Curated Status -->
-        <div id="header-status" class="hidden md:flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/50 border border-neutral-100 backdrop-blur-md text-xs font-mono text-neutral-500 shadow-xs">
-          <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+        <div id="header-status" class="hidden md:flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/50 border border-neutral-800/40 backdrop-blur-md text-xs font-mono text-neutral-400 shadow-xs">
+          <span class="h-1.5 w-1.5 rounded-full bg-orange-500 animate-pulse"></span>
           <span>GALERIA ATIVA</span>
         </div>
 
         <!-- Right Side Nav Metadata -->
         <div class="flex items-center gap-6">
-          <div id="header-time" class="text-xs font-mono text-neutral-400 hidden sm:block">
-            BR: <span id="clock" class="text-neutral-700">00:00:00</span>
+          <div id="header-visitors" class="text-[10px] font-mono text-neutral-300 hidden sm:flex items-center gap-2.5 px-3.5 py-1.5 rounded-xl bg-slate-900/50 border border-neutral-800/40 backdrop-blur-md shadow-xs">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-orange-500 animate-pulse">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <span class="text-neutral-400 font-medium tracking-wide">VISITAS:</span>
+            <span id="visitor-count" class="text-neutral-200 font-bold tracking-wider">146.380</span>
           </div>
-          <a href="#work-with-me" class="px-5 py-2.5 rounded-full bg-neutral-900 text-white hover:bg-neutral-800 transition-all duration-300 shadow-sm text-xs font-semibold tracking-wider uppercase">
+          <a href="#work-with-me" class="px-5 py-2.5 rounded-full bg-orange-500 text-white hover:bg-orange-600 transition-all duration-300 shadow-[0_4px_15px_rgba(249,115,22,0.25)] text-xs font-semibold tracking-wider uppercase">
             Contato
           </a>
         </div>
       </div>
     </header>
-
+ 
     <!-- Main Content -->
     <main class="relative z-10 pt-24">
       
       <!-- HERO SECTION -->
       <section id="hero" class="relative min-h-[85vh] flex flex-col justify-center items-center px-6 max-w-7xl mx-auto text-center py-20 pointer-events-auto">
         
-        <!-- Subtle Top Badge -->
-        <div class="header-badge inline-flex items-center gap-2 mb-8 px-4 py-1.5 rounded-full bg-white/60 border border-neutral-100/80 backdrop-blur-md shadow-xs animate-fade-in">
-          <span class="font-mono text-[10px] uppercase tracking-[0.25em] text-neutral-500 font-medium">Artes Digitais — Vol. II</span>
-        </div>
+        <!-- SVG Filter for Gooey Text Morphing -->
+        <svg class="absolute h-0 w-0 pointer-events-none" aria-hidden="true" focusable="false">
+          <defs>
+            <filter id="threshold">
+              <feColorMatrix
+                in="SourceGraphic"
+                type="matrix"
+                values="1 0 0 0 0
+                        0 1 0 0 0
+                        0 0 1 0 0
+                        0 0 0 255 -140"
+              />
+            </filter>
+          </defs>
+        </svg>
 
-        <!-- Big Display Title -->
-        <h1 class="font-display text-5xl sm:text-7xl md:text-8xl lg:text-[10rem] font-medium tracking-[-0.03em] leading-[0.9] text-neutral-900 mb-10 select-none cursor-default max-w-5xl">
-          <span class="title-word opacity-0 block sm:inline translate-y-8 transition-all duration-1000 ease-out">Frame</span><!--
-       --><span class="title-word opacity-0 block sm:inline-block text-neutral-400 font-light translate-y-8 transition-all duration-1000 ease-out delay-100 italic">Lab</span>
-        </h1>
+        <!-- Big Display Title with Gooey Text Morphing -->
+        <div class="relative w-full max-w-5xl mb-6 select-none cursor-default min-h-[110px] sm:min-h-[145px] md:min-h-[190px] lg:min-h-[220px] flex items-center justify-center overflow-visible">
+          <div class="flex items-center justify-center w-full h-full relative" style="filter: url(#threshold)">
+            <span id="gooey-text-1" class="absolute inline-block select-none text-center font-display text-5xl sm:text-7xl md:text-8xl lg:text-[9rem] font-bold tracking-[-0.04em] text-white uppercase leading-[0.9] whitespace-nowrap">Frame</span>
+            <span id="gooey-text-2" class="absolute inline-block select-none text-center font-display text-5xl sm:text-7xl md:text-8xl lg:text-[9rem] font-bold tracking-[-0.04em] text-white uppercase leading-[0.9] whitespace-nowrap">Frame</span>
+          </div>
+        </div>
 
         <!-- Down Arrow Indicator & Status Row -->
         <div class="hero-sub actions flex flex-col sm:flex-row items-center gap-8 opacity-0 translate-y-4 duration-1500 delay-300">
-          <a href="#gallery-section" class="scroll-btn group flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-neutral-600 transition-all duration-300 hover:text-neutral-900">
+          <a href="#gallery-section" class="scroll-btn group flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400 transition-all duration-300 hover:text-white">
             <span>Explorar Galeria</span>
-            <div class="h-8 w-8 rounded-full border border-neutral-200 flex items-center justify-center transition-all duration-300 group-hover:border-neutral-900 group-hover:translate-y-1">
+            <div class="h-8 w-8 rounded-full border border-neutral-800 flex items-center justify-center transition-all duration-300 group-hover:border-orange-500 group-hover:text-orange-500 group-hover:translate-y-1">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
               </svg>
@@ -91,20 +112,20 @@
       <section id="gallery-section" class="py-24 px-6 max-w-7xl mx-auto scroll-mt-20">
         
         <!-- Minimalist Directory Header -->
-        <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16 border-b border-neutral-100 pb-8">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16 border-b border-neutral-900 pb-8">
           <div>
-            <h2 class="font-display text-4xl sm:text-5xl font-semibold tracking-tight text-neutral-900 uppercase">Portfólio</h2>
+            <h2 class="font-display text-4xl sm:text-5xl font-semibold tracking-tight text-white uppercase">Portfólio</h2>
           </div>
         </div>
 
         <!-- Interactive Grid Container -->
-        <div id="gallery-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 lg:gap-12 min-h-[400px]">
+        <div id="gallery-grid" class="grid grid-cols-1 gap-16 sm:gap-24 max-w-xl mx-auto min-h-[400px] overflow-visible py-12">
           <!-- Dynamic Art Cards without titles or descriptions will be injected here via script.js -->
         </div>
 
         <!-- No Results Msg State -->
-        <div id="no-results" class="hidden flex-col items-center justify-center py-20 text-neutral-400">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 mb-4 opacity-50">
+        <div id="no-results" class="hidden flex-col items-center justify-center py-20 text-neutral-500">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 mb-4 opacity-50 text-orange-500">
             <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           <p class="font-mono text-xs uppercase tracking-wider">Nenhuma arte encontrada.</p>
@@ -112,10 +133,10 @@
       </section>
 
       <!-- CONTACT / DISCORD WORK WITH ME SECTION -->
-      <section id="work-with-me" class="relative py-32 px-6 bg-[#fafafa] border-t border-neutral-100 overflow-hidden">
+      <section id="work-with-me" class="relative py-32 px-6 bg-transparent border-t border-neutral-900 overflow-hidden">
         
         <!-- Background Ambient Accents -->
-        <div class="absolute inset-x-0 bottom-0 top-1/2 pointer-events-none z-0 bg-radial from-neutral-200/40 to-transparent blur-3xl"></div>
+        <div class="absolute inset-x-0 bottom-0 top-1/2 pointer-events-none z-0 bg-radial from-orange-500/10 to-transparent blur-3xl"></div>
         
         <div class="max-w-6xl mx-auto relative z-10">
           
@@ -123,16 +144,16 @@
             
             <!-- Context Heading Area (Left Column in Wide Screen) -->
             <div class="lg:col-span-6 flex flex-col justify-center">
-              <span class="font-mono text-xs uppercase tracking-[0.2em] text-neutral-400 font-medium block mb-2">Solicitação de Trabalho</span>
-              <h2 class="font-display text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-neutral-900 mb-6">Trabalhe Comigo</h2>
-              <p class="text-neutral-500 text-sm sm:text-base leading-relaxed tracking-wide mb-8">
+              <span class="font-mono text-xs uppercase tracking-[0.2em] text-orange-500 font-medium block mb-2">Solicitação de Trabalho</span>
+              <h2 class="font-display text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-white mb-6">Trabalhe Comigo</h2>
+              <p class="text-neutral-400 text-sm sm:text-base leading-relaxed tracking-wide mb-8">
                 Para comissões, colaborações e orçamentos, entre em contato comigo exclusivamente através do Discord. Projetos criados sob medida de acordo com suas exigências conceituais e prazos.
               </p>
               
               <!-- Luxury quote styling -->
-              <div class="flex items-start gap-4 p-5 rounded-2xl bg-white/40 border border-neutral-200/60 backdrop-blur-md">
-                <span class="text-3xl font-display text-neutral-300 italic">“</span>
-                <p class="text-xs font-mono text-neutral-500 leading-relaxed italic uppercase tracking-wider">
+              <div class="flex items-start gap-4 p-5 rounded-2xl bg-slate-900/40 border border-neutral-800/60 backdrop-blur-md">
+                <span class="text-3xl font-display text-orange-500 italic">“</span>
+                <p class="text-xs font-mono text-neutral-400 leading-relaxed italic uppercase tracking-wider">
                   "A execução perfeita é o equilíbrio entre a disciplina rigorosa e a profundidade conceitual livre."
                 </p>
               </div>
@@ -145,22 +166,22 @@
               <div class="card-persp py-4 w-full max-w-[420px]">
                 
                 <!-- Inner Luxury Card -->
-                <div id="discord-card" class="discord-card-3d relative w-full rounded-3xl bg-[rgba(255,255,255,0.45)] border border-white/60 backdrop-blur-xl p-8 shadow-2xl transition-all duration-200 ease-out select-none">
+                <div id="discord-card" class="discord-card-3d relative w-full rounded-3xl bg-slate-900/55 border border-neutral-800/50 backdrop-blur-xl p-8 shadow-2xl transition-all duration-200 ease-out select-none">
                   
                   <!-- Glossy/Glass Reflection Overlay -->
                   <div class="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none z-20">
-                    <div class="card-shimmer absolute inset-0 bg-linear-to-tr from-transparent via-white/10 to-transparent"></div>
+                    <div class="card-shimmer absolute inset-0 bg-linear-to-tr from-transparent via-white/5 to-transparent"></div>
                   </div>
 
                   <!-- Deep Inner Glow -->
-                  <div class="absolute -top-12 -right-12 w-32 h-32 bg-emerald-100 rounded-full filter blur-3xl opacity-40 mix-blend-multiply transition-all duration-300 pointer-events-none"></div>
+                  <div class="absolute -top-12 -right-12 w-32 h-32 bg-orange-500/10 rounded-full filter blur-3xl opacity-40 mix-blend-multiply transition-all duration-300 pointer-events-none"></div>
 
                   <!-- Card Header (Discord luxury styling label) -->
-                  <div class="flex items-center justify-between mb-8 pb-4 border-b border-neutral-200/40">
+                  <div class="flex items-center justify-between mb-8 pb-4 border-b border-neutral-800/40">
                     <div class="flex items-center gap-2">
                       <span class="flex h-2 w-2 relative">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
                       </span>
                       <span class="font-mono text-[10px] tracking-widest text-[#5865F2] font-semibold uppercase">DISCORD PRIME</span>
                     </div>
@@ -173,13 +194,13 @@
                   <!-- Avatar Portrait Container -->
                   <div class="avatar-parent-3d flex flex-col items-center mb-8">
                     <!-- Glow Frame Ring inside -->
-                    <div class="relative group p-1.5 rounded-full border border-neutral-300/40 bg-white/20 shadow-lg mb-4 cursor-pointer scale-100 hover:scale-105 transition-all duration-300">
+                    <div class="relative group p-1.5 rounded-full border border-neutral-800/40 bg-slate-950/20 shadow-lg mb-4 cursor-pointer scale-100 hover:scale-105 transition-all duration-300">
                       
                       <!-- Absolute Glow Ring overlay -->
-                      <div class="absolute inset-0 rounded-full bg-linear-to-tr from-neutral-200 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                      <div class="absolute inset-0 rounded-full bg-linear-to-tr from-orange-500/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
                       <!-- Avatar Frame -->
-                      <div class="relative z-10 w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border border-neutral-200">
+                      <div class="relative z-10 w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border border-neutral-800">
                         <img 
                           id="avatar-image"
                           src="https://i.pinimg.com/originals/85/26/7f/85267f44d31a678a04f00b276f6287ee.gif" 
@@ -190,11 +211,11 @@
                       </div>
                       
                       <!-- Online Status Indicator Dot -->
-                      <div class="absolute bottom-1 right-2 z-20 h-5 w-5 rounded-full border-4 border-white bg-emerald-500"></div>
+                      <div class="absolute bottom-1 right-2 z-20 h-5 w-5 rounded-full border-4 border-slate-900 bg-orange-500 animate-pulse"></div>
                     </div>
 
                     <!-- User Name & Role Info with high-contrast minimalism -->
-                    <h3 class="discord-card-username font-display text-xl font-bold tracking-wide border border-[#ae8f8f] text-[#8f8f8f] px-3 py-1 rounded-lg flex items-center gap-1.5">
+                    <h3 class="discord-card-username font-display text-xl font-bold tracking-wide border border-[#ae8f8f] text-[#f97316] px-3 py-1 rounded-lg flex items-center gap-1.5 bg-slate-950/30">
                       suit
                     </h3>
                     <p class="font-mono text-[10px] tracking-wider text-neutral-400 mt-1 uppercase">ARTISTA DIGITAL / TECH DESIGNER</p>
@@ -203,24 +224,24 @@
                   <!-- Detailed User Credentials Grid (Similar to Discord Profile View) -->
                   <div class="space-y-3.5 mb-8 text-left z-10 relative">
                     
-                    <div class="flex justify-between items-center py-2 px-3 rounded-lg bg-neutral-100/45 border border-white/40">
-                      <span class="font-mono text-[10px] uppercase tracking-wider text-neutral-400">Nome</span>
-                      <span class="font-sans text-xs font-semibold text-neutral-700">suit</span>
+                    <div class="flex justify-between items-center py-2 px-3 rounded-lg bg-slate-950/50 border border-neutral-800/40">
+                      <span class="font-mono text-[10px] uppercase tracking-wider text-neutral-500">Nome</span>
+                      <span class="font-sans text-xs font-semibold text-neutral-300">suit</span>
                     </div>
 
-                    <div class="flex justify-between items-center py-2 px-3 rounded-lg bg-neutral-100/45 border border-white/40">
-                      <span class="font-mono text-[10px] uppercase tracking-wider text-neutral-400">Usuário</span>
-                      <span class="font-sans text-xs font-semibold text-neutral-700">@s242s</span>
+                    <div class="flex justify-between items-center py-2 px-3 rounded-lg bg-slate-950/50 border border-neutral-800/40">
+                      <span class="font-mono text-[10px] uppercase tracking-wider text-neutral-500">Usuário</span>
+                      <span class="font-sans text-xs font-semibold text-neutral-300">@s242s</span>
                     </div>
 
-                    <div class="flex justify-between items-center py-2 px-3 rounded-lg bg-neutral-100/45 border border-white/40">
-                      <span class="font-mono text-[10px] uppercase tracking-wider text-neutral-400">Discord User</span>
-                      <span class="font-sans text-xs font-semibold text-neutral-700">suit</span>
+                    <div class="flex justify-between items-center py-2 px-3 rounded-lg bg-slate-950/50 border border-neutral-800/40">
+                      <span class="font-mono text-[10px] uppercase tracking-wider text-neutral-500">Discord User</span>
+                      <span class="font-sans text-xs font-semibold text-neutral-300">suit</span>
                     </div>
 
-                    <div class="flex justify-between items-center py-2 px-3 rounded-lg bg-neutral-100/45 border border-white/40">
-                      <span class="font-mono text-[10px] uppercase tracking-wider text-neutral-400">Discord ID</span>
-                      <span class="font-mono text-[10px] text-neutral-500">1390366905956700311</span>
+                    <div class="flex justify-between items-center py-2 px-3 rounded-lg bg-slate-950/50 border border-neutral-800/40">
+                      <span class="font-mono text-[10px] uppercase tracking-wider text-neutral-500">Discord ID</span>
+                      <span class="font-mono text-[10px] text-neutral-400">1390366905956700311</span>
                     </div>
 
                   </div>
@@ -228,7 +249,7 @@
                   <!-- Discord Interactive Copier Button -->
                   <button 
                     id="copy-discord-btn"
-                    class="relative w-full py-4 rounded-xl bg-neutral-900 text-white font-mono text-xs uppercase tracking-[0.14em] font-medium overflow-hidden transition-all duration-300 hover:bg-neutral-800 hover:scale-[1.02] active:scale-[0.98] shadow-sm flex items-center justify-center gap-2 cursor-pointer group"
+                    class="relative w-full py-4 rounded-xl bg-orange-500 text-white font-mono text-xs uppercase tracking-[0.14em] font-medium overflow-hidden transition-all duration-300 hover:bg-orange-600 hover:scale-[1.02] active:scale-[0.98] shadow-[0_4px_20px_rgba(249,115,22,0.3)] flex items-center justify-center gap-2 cursor-pointer group"
                   >
                     <!-- Background Shine Effect on Hover -->
                     <span class="absolute inset-0 w-full h-full bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>
@@ -242,7 +263,7 @@
                   </button>
 
                   <div class="mt-4 text-center">
-                    <span class="text-[9px] font-mono uppercase tracking-widest text-neutral-400">CLIQUE DUPLO PARA COPIAR & PROTOCOLO DISS</span>
+                    <span class="text-[9px] font-mono uppercase tracking-widest text-[#5865F2]">CLIQUE DUPLO PARA COPIAR & PROTOCOLO DISS</span>
                   </div>
 
                 </div>
@@ -336,27 +357,30 @@
     </div>
 
     <!-- NOTIFICATION DE LUXE TOAST -->
-    <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 z-100 px-6 py-3 rounded-full bg-neutral-900 text-white text-xs font-mono uppercase tracking-[0.2em] border border-white/5 shadow-2xl scale-90 opacity-0 pointer-events-none transition-all duration-500 ease-out flex items-center gap-2">
-      <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+    <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 z-100 px-6 py-3 rounded-full bg-slate-900 text-white text-xs font-mono uppercase tracking-[0.2em] border border-neutral-800/60 shadow-2xl scale-90 opacity-0 pointer-events-none transition-all duration-500 ease-out flex items-center gap-2">
+      <span class="h-1.5 w-1.5 rounded-full bg-orange-500 animate-pulse"></span>
       <span id="toast-message">Copiado para a Área de Transferência</span>
     </div>
 
     <!-- LUXURY MINIMALIST FOOTER -->
-    <footer class="bg-[#fafafa] border-t border-neutral-100 py-16 px-6 relative z-10">
+    <footer class="bg-transparent border-t border-neutral-900 py-16 px-6 relative z-10">
       <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
         
-        <div class="flex items-center gap-4 text-xs font-mono text-neutral-400 uppercase tracking-widest">
+        <div class="flex items-center gap-4 text-xs font-mono text-neutral-500 uppercase tracking-widest">
           <span>© 2026 FRAMELAB</span>
-          <span class="h-1 w-1 rounded-full bg-neutral-300"></span>
-          <span>CURADO POR SUIT</span>
+          <span class="h-1.5 w-1.5 rounded-full bg-orange-500"></span>
+          <span>BY SUIT</span>
         </div>
 
         <div class="flex items-center gap-6">
-          <a href="#" class="font-mono text-xs tracking-widest uppercase text-neutral-400 hover:text-neutral-900 transition-all duration-300">Voltar ao topo ↑</a>
+          <a href="#" class="font-mono text-xs tracking-widest uppercase text-neutral-400 hover:text-orange-500 transition-all duration-300">Voltar ao topo ↑</a>
         </div>
 
       </div>
     </footer>
+
+    <!-- Sleek High-End Blue Finish Bar -->
+    <div class="h-1.5 w-full bg-blue-600 relative z-20"></div>
 
     <!-- Load custom javascript at the bottom -->
     <script type="module" src="/script.js"></script>
